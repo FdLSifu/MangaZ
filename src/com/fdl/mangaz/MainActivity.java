@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.app.Activity;
 import android.content.Intent;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,8 +60,18 @@ public class MainActivity extends Activity implements OnItemClickListener {
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_SEARCH)
+		{
+			Intent intent = new Intent(this,FindActivity.class);
+        	startActivity(intent);
+            return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 	
-	 public void onItemClick(AdapterView<?> parent, View v,
+	public void onItemClick(AdapterView<?> parent, View v,
              int position, long id) {
 			Intent intent = new Intent(this,ChapterView.class);
 			ChapterView.current_manga_name = ((Manga)parent.getItemAtPosition(position)).getTitle();
