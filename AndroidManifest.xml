@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.fdl.mangaz"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="17" />
+	<uses-permission android:name="android.permission.INTERNET" /> 
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Holo"
+        android:uiOptions="splitActionBarWhenNarrow" >
+        <meta-data android:name="android.support.UI_OPTIONS"
+              android:value="splitActionBarWhenNarrow" />
+        <activity
+            android:name="com.fdl.mangaz.MainActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.fdl.mangaz.DownloadActivity"
+            android:parentActivityName ="com.fdl.mangaz.MainActivity">
+        </activity>
+        <activity
+            android:name="com.fdl.mangaz.FindActivity"
+            android:parentActivityName ="com.fdl.mangaz.MainActivity">
+        </activity>
+        <activity
+            android:name="com.fdl.mangaz.SettingsActivity"
+            android:parentActivityName ="com.fdl.mangaz.MainActivity">
+        </activity>
+        <activity
+            android:name="com.fdl.mangaz.MangaView"
+            android:parentActivityName ="com.fdl.mangaz.FindActivity">
+        </activity>
+        <activity
+           android:name="com.fdl.mangaz.ChapterView"
+           android:parentActivityName ="com.fdl.mangaz.MainActivity">
+        </activity>
+        <activity
+           android:name="com.fdl.mangaz.ChapterSlider"
+           android:parentActivityName ="com.fdl.mangaz.ChapterView">
+        </activity>
+    </application>
+
+</manifest>
