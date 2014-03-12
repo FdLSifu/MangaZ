@@ -16,6 +16,7 @@ import android.widget.SearchView.OnQueryTextListener;
 public class FindActivity extends Activity implements OnItemClickListener, OnQueryTextListener{
 	public ListView lv = null;
 	public static ArrayAdapter<String> adapter = null;
+	private MangaDownloader mAsyncTask;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -27,43 +28,28 @@ public class FindActivity extends Activity implements OnItemClickListener, OnQue
 		// Create list view
 		lv = (ListView)findViewById(R.id.listview);
 		
-		if (Manga.web_library == null)
-		{
-			// create adapter to display items
-			if (adapter == null)
-				adapter = new ArrayAdapter<String>(this,
-						android.R.layout.simple_list_item_1, Manga.manga_names);
-			else
-			{
-				adapter.clear();
-				for (int i = 0; i < Manga.manga_names.size(); i ++)
-					adapter.add(Manga.manga_names.get(i));
-				adapter.notifyDataSetChanged();
-			}
-
-			// Create if not already running
-			if (!( (MangaDownloader.wasCalled == true) || (MangaDownloader.isRunning == true) ))
-				(new MangaDownloader(this)).execute("");
-		}
-
+		if (Manga.web_library != null)
+			Manga.manga_names = Manga.web_library.toStringArray();
+		
+		// create adapter to display items
+		if (adapter == null)
+			adapter = new ArrayAdapter<String>(this,
+					android.R.layout.simple_list_item_1, Manga.manga_names);
 		else
 		{
-			Manga.manga_names = Manga.web_library.toStringArray();
-			if (adapter == null)
-				adapter = new ArrayAdapter<String>(this,
-						android.R.layout.simple_list_item_1, Manga.manga_names);
-			else
-			{
-				/*adapter.clear();
-				for (int i = 0; i < Manga.manga_names.size(); i ++)
-					adapter.add(Manga.manga_names.get(i));
-				adapter.notifyDataSetChanged();
-				*/
-				// Create if not already running
-				if (!( (MangaDownloader.wasCalled == true) || (MangaDownloader.isRunning == true) ))
-					(new MangaDownloader(this)).execute("");
-			}
+			adapter.clear();
+			for (int i = 0; i < Manga.manga_names.size(); i ++)
+				adapter.add(Manga.manga_names.get(i));
+			adapter.notifyDataSetChanged();
 		}
+
+		// Create if not already running
+		if (Manga.manga_names.size() == 0)
+		{
+			mAsyncTask = new MangaDownloader(this);
+			mAsyncTask.execute("");
+		}
+	
 		// Initialize adapter
 		lv.setAdapter(adapter);
 		lv.setOnItemClickListener(this);
@@ -106,4 +92,11 @@ public class FindActivity extends Activity implements OnItemClickListener, OnQue
 		return false;
 	}
 
+	
+	@Override
+	protected void onPause() {
+		if(mAsyncTask != null)
+			mAsyncTask.cancel(true);
+		super.onPause();
+	}
 }

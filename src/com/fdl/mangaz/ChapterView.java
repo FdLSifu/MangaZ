@@ -13,6 +13,7 @@ public class ChapterView extends Activity implements OnItemClickListener {
 	public ListView lv = null;
 	public static ArrayAdapter<String> adapter = null;
 	public static String current_manga_name;
+	private ChapterViewAsync mAsyncTask;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -20,13 +21,19 @@ public class ChapterView extends Activity implements OnItemClickListener {
 		// Create list view
 		lv = (ListView)findViewById(R.id.chapter_list);
 		Manga current_manga = Manga.private_library.getManga(current_manga_name);
+		
+		if (mAsyncTask == null)
+			mAsyncTask = new ChapterViewAsync(this);
+		else
+			mAsyncTask.setContext(this);
+		
 		if(Manga.mra == null)
 			(new ChapterViewAsync(this)).execute(current_manga.getMainlink().toString());
 		else
 		{
 			Manga.mra.setCurrentURL(current_manga.getMainlink().toString());
 			if(current_manga.getChapterlist().length == 0)
-				(new ChapterViewAsync(this)).execute(current_manga.getMainlink().toString());
+				mAsyncTask.execute(current_manga.getMainlink().toString());
 		}
 		if (adapter == null)
 		{
@@ -43,5 +50,11 @@ public class ChapterView extends Activity implements OnItemClickListener {
 		Intent intent = new Intent(this,ChapterSlider.class);
 		ChapterSlider.current_chapter = (String)parent.getItemAtPosition(position);
     	startActivity(intent);
+	}
+	
+	@Override
+	protected void onPause() {
+		mAsyncTask.cancel(true);
+		super.onPause();
 	}
 }

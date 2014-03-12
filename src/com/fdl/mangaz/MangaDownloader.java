@@ -58,22 +58,22 @@ public class MangaDownloader extends AsyncTask<String, Void, ArrayList<ArrayList
 	protected ArrayList<ArrayList<String>> doInBackground(String... manga_first_chapter_url) {
 		
 	   	if (Manga.mra == null)
-	   	{
-   			SharedPreferences settings = context.getSharedPreferences(MangaReaderAPI.MANGA_LIST_SETTINGS, 0);
-   			Manga.mra = new MangaReaderAPI();
-   			ArrayList<ArrayList<String>> manga_list = new ArrayList<ArrayList<String>>(); 
-	   		manga_list = GSON.fromJson(settings.getString("mangalist", null), manga_list.getClass());
-	   		if (manga_list != null)
-	   			Manga.mra.setRawMangaList(manga_list);
-	   		if((Manga.mra.getRawMangaList() == null) || (Manga.mra.getRawMangaList().size() == 0))
-	   		{
-	   			Manga.mra.initializeMangaList();
-	   			Editor editor = settings.edit();
-	   			editor.putString("mangalist",GSON.toJson(Manga.mra.getRawMangaList()));
-	   			editor.commit();
-	   		}
+	   		Manga.mra = new MangaReaderAPI();
+	   	
+		SharedPreferences settings = context.getSharedPreferences(MangaReaderAPI.MANGA_LIST_SETTINGS, 0);
+		
+		ArrayList<ArrayList<String>> manga_list = new ArrayList<ArrayList<String>>(); 
+   		manga_list = GSON.fromJson(settings.getString("mangalist", null), manga_list.getClass());
+   		if (manga_list != null)
+   			Manga.mra.setRawMangaList(manga_list);
+   		if((Manga.mra.getRawMangaList() == null) || (Manga.mra.getRawMangaList().size() == 0))
+   		{
+   			Manga.mra.initializeMangaList();
+   			Editor editor = settings.edit();
+   			editor.putString("mangalist",GSON.toJson(Manga.mra.getRawMangaList()));
+   			editor.commit();
+   		}
 
-	   	}
 		
     	return Manga.mra.getRawMangaList();
     }

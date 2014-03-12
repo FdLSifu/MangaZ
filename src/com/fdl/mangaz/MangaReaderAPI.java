@@ -73,7 +73,7 @@ public class MangaReaderAPI implements MangaEngine{
 	 */
 	@Override
 	public void setCurrentURL(String url) {
-		if(currentURL != url)
+		if((currentURL == null) || (!currentURL.equals(url)))
 		{
 			chapterNames = new ArrayList<String>();
 			chapterURLs = new String[0];

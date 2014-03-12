@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -26,8 +28,16 @@ public class PermanentLibrary extends Library {
 	@Override
 	public int addManga(Manga m,boolean fromSettings) {
 		// TODO Auto-generated method stub
+		
 		if(!fromSettings)
 		{
+			try {
+				m.setMainlink(new URL(Manga.mra.getFirstChapterURL(m.getTitle()).toString()));
+			} catch (MalformedURLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
 	        SharedPreferences settings = mContext.getSharedPreferences(LibraryAdapter.PREFS_NAME, 0);
 	        SharedPreferences.Editor editor = settings.edit();
 	       
@@ -35,7 +45,7 @@ public class PermanentLibrary extends Library {
 	        editor.putInt("nb_mangas", nb_mangas+1);
 	                
 			editor.putString("manga"+"_"+nb_mangas, m.getTitle());
-			editor.putString("manga_url"+"_"+nb_mangas, Manga.mra.getFirstChapterURL(m.getTitle()).toString());
+			editor.putString("manga_url"+"_"+nb_mangas, m.getMainlink().toString());
 	
 			editor.commit();
 		}
