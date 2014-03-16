@@ -182,8 +182,12 @@ public class MainActivity extends Activity implements OnItemClickListener,OnItem
 				{
 					Manga m = mainadapter.getItem(index.intValue());
 					//Remove preferences associated to this manga
-					Editor editor = getSharedPreferences(StringUtil.sanitizeFilename(m.getTitle()), 0).edit();
-					editor.clear().commit();
+					SharedPreferences settings = getSharedPreferences(StringUtil.sanitizeFilename(m.getTitle()), 0);
+					if(settings != null)
+					{
+						Editor editor = settings.edit();
+						editor.clear().commit();
+					}
 					//Remove manga if any
 					String dir = Constants.DEFAULT_SD_CARD_PATH + "/" + m.getTitle();
 					File manga_dir = new File(dir);

@@ -59,6 +59,9 @@ public class MangaReaderAPI implements MangaEngine{
 		this.currentURL = currentURL;
 	}
 
+	public MangaReaderAPI(MangaReaderAPI mra) {
+		// TODO Auto-generated constructor stub
+	}
 	/**
 	 * Returns currentURL
 	 */

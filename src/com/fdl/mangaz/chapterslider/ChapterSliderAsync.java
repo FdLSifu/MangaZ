@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import com.fdl.mangaz.utils.Constants;
 import com.fdl.mangaz.utils.Manga;
+import com.fdl.mangaz.utils.MangaReaderAPI;
 import com.fdl.mangaz.utils.StringUtil;
 import com.google.gson.Gson;
 
@@ -35,23 +36,22 @@ public class ChapterSliderAsync extends AsyncTask<Object, Integer, Void> {
 		SharedPreferences settings = mContext.getSharedPreferences(StringUtil.sanitizeFilename(ChapterSliderActivity.current_manga.getTitle()), 0);
 		int nbPage = settings.getInt(Constants.NB_PAGE+((String)manga[1]), 0);
 		ArrayList<String> chapter_url = new ArrayList<String>();
+		
 		if (nbPage == 0)
-		{			
+		{
+			chapter_url = GSON.fromJson(settings.getString(StringUtil.sanitizeFilename(ChapterSliderActivity.current_manga.getTitle()) + Constants.CHAPTER_URL,null),chapter_url.getClass());
+			if( (chapter_url == null) || (chapter_url.size() ==0))
+				chapter_url = Manga.mra.getChapterList();
+			
 			try {
-				chapter_url = GSON.fromJson(settings.getString(Constants.CHAPTER_URL,null),chapter_url.getClass());
-				if( (chapter_url != null) && (chapter_url.size() !=0))
-					ChapterSliderActivity.current_manga.setMainlink(new URL(chapter_url.get(ChapterSliderActivity.chapter_number)));
-				else
-					ChapterSliderActivity.current_manga.setMainlink(new URL(Manga.mra.getChapterList().get(ChapterSliderActivity.chapter_number)));
+				ChapterSliderActivity.current_manga.setMainlink(new URL(chapter_url.get(ChapterSliderActivity.chapter_number)));				
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-			if( (chapter_url != null) && (chapter_url.size() !=0))
-				Manga.mra.setCurrentURL(chapter_url.get(ChapterSliderActivity.chapter_number));
-			else
-				Manga.mra.setCurrentURL(Manga.mra.getChapterList().get(ChapterSliderActivity.chapter_number));
+			Manga.mra.setCurrentURL(chapter_url.get(ChapterSliderActivity.chapter_number));
+			
 			Manga.mra.initializePageList();
 			// write settings
 			Editor editor = settings.edit();

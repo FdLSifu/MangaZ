@@ -91,7 +91,7 @@ public class ChapterViewAsync extends AsyncTask<String, Void, Void> {
 	   	
 		SharedPreferences settings = context.getSharedPreferences(StringUtil.sanitizeFilename(ChapterViewActivity.current_manga_name), 0);
    		
-		Manga.chapter_names = GSON.fromJson(settings.getString(Constants.CHAPTER_LIST,null),Manga.chapter_names.getClass());
+		Manga.chapter_names = GSON.fromJson(settings.getString(StringUtil.sanitizeFilename(ChapterViewActivity.current_manga_name)+Constants.CHAPTER_LIST,null),Manga.chapter_names.getClass());
 		if( Manga.chapter_names !=null )
 		{
 			MangaReaderAPI.chapterNames.clear();
@@ -103,12 +103,13 @@ public class ChapterViewAsync extends AsyncTask<String, Void, Void> {
 			Manga.mra.refreshLists();
 
 			Manga.chapter_names = new ArrayList<String>();
+			Manga.chapter_url = new ArrayList<String>();
 			Manga.chapter_names.addAll(MangaReaderAPI.chapterNames);
 			Manga.chapter_url.addAll(Manga.mra.getChapterList());
 			// Write setting
 			Editor editor = settings.edit();
-			editor.putString(Constants.CHAPTER_LIST,GSON.toJson(MangaReaderAPI.chapterNames));
-			editor.putString(Constants.CHAPTER_URL,GSON.toJson(Manga.chapter_url));
+			editor.putString(StringUtil.sanitizeFilename(ChapterViewActivity.current_manga_name)+Constants.CHAPTER_LIST,GSON.toJson(MangaReaderAPI.chapterNames));
+			editor.putString(StringUtil.sanitizeFilename(ChapterViewActivity.current_manga_name)+Constants.CHAPTER_URL,GSON.toJson(Manga.chapter_url));
 			editor.commit();
 		}
 		
