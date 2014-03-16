@@ -20,6 +20,9 @@ public class Manga {
 	public static MangaReaderAPI mra = null;
 	public static ArrayList<String> manga_names = new ArrayList<String>();
 	
+    public static ArrayList<String> chapter_names = new ArrayList<String>();
+    public static ArrayList<String> chapter_url = new ArrayList<String>();
+    
 	public Manga(String name, URL mainlink)
 	{
 		setTitle(name);

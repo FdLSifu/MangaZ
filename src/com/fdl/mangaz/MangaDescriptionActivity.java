@@ -6,7 +6,9 @@ import com.fdl.mangaz.utils.Manga;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,44 +21,19 @@ public class MangaDescriptionActivity extends Activity {
 	private Manga selected_manga;
 	private ImageView imageview;
 	private TextView textview;
-	
+	private MangaDescriptionActivity me;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
+		
+		me = this;
 		setContentView(R.layout.manga_selected);
 		
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-						
-		runOnUiThread(new Runnable() {
-			
-			@Override
-			public void run() {
-				Intent intent = getIntent();
-				String manga_name = intent.getStringExtra("manga_name");
-
-				Manga current_manga = Manga.web_library.getManga(manga_name);
-				
-				selected_manga = current_manga;
-				
-				imageview = (ImageView)findViewById(R.id.manga_cover);
-				textview = (TextView)findViewById(R.id.manga_title);
-				
-				if(selected_manga.getCover() == null)
-					try {
-						selected_manga.setCover(Manga.mra.getImage(selected_manga.getMainlink().toString()));
-						selected_manga.setInformations(Manga.mra.getDescription(selected_manga.getMainlink().toString()));
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-				imageview.setImageBitmap(selected_manga.getCover());
-				
-				textview.setText(selected_manga.getInformations());
-				
-			}
-		});
+		
+		(new MangaDescriptionAsync()).execute();
 				
 	}
 	
@@ -100,4 +77,49 @@ public class MangaDescriptionActivity extends Activity {
 	    }
 	}
 
+	private class MangaDescriptionAsync extends AsyncTask<Void, Void, Void>
+	{
+		private ProgressDialog mDialog;
+		protected Void doInBackground(Void[] params) {
+			Intent intent = getIntent();
+			String manga_name = intent.getStringExtra("manga_name");
+
+			Manga current_manga = Manga.web_library.getManga(manga_name);
+			
+			selected_manga = current_manga;
+			
+			imageview = (ImageView)findViewById(R.id.manga_cover);
+			textview = (TextView)findViewById(R.id.manga_title);
+			
+			if(selected_manga.getCover() == null)
+				try {
+					selected_manga.setCover(Manga.mra.getImage(selected_manga.getMainlink().toString()));
+					selected_manga.setInformations(Manga.mra.getDescription(selected_manga.getMainlink().toString()));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}			
+			return null;
+			
+		}
+		
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+	    	mDialog = new ProgressDialog(me);
+	        mDialog.setMessage("Please wait...");
+	        mDialog.show();
+	        
+		}
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			imageview.setImageBitmap(selected_manga.getCover());
+			
+			textview.setText(selected_manga.getInformations());
+			
+			mDialog.dismiss();
+		}
+	}
 }

@@ -9,15 +9,14 @@
          android:layout_width="match_parent"
          android:layout_height="match_parent"
          android:layout_weight="1"
-         android:scaleType="fitCenter"
-         android:src="@drawable/ic_launcher" />
+         android:scaleType="fitCenter" />
      
      <TextView
          android:id="@+id/manga_title"
          android:layout_width="match_parent"
          android:layout_height="match_parent"
          android:layout_weight="1"
-         android:text="Test" />
+         android:text="" />
 
 
 </LinearLayout>

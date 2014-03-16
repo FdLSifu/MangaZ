@@ -21,7 +21,6 @@ public class ChapterViewAsync extends AsyncTask<String, Void, Void> {
 	private Context context;
 	private ProgressDialog mDialog;
 	private Gson GSON = new Gson();
-	ArrayList<String> chapter_names = new ArrayList<String>();
     
     public ChapterViewAsync(Context context) {
     	this.context = context;
@@ -37,10 +36,10 @@ public class ChapterViewAsync extends AsyncTask<String, Void, Void> {
     	if (ChapterViewActivity.adapter != null)
     	{
     		ChapterViewActivity.adapter.clear();
-    		ChapterViewActivity.adapter.addAll(chapter_names);
-    		MangaReaderAPI.nbChapters = chapter_names.size();
+    		ChapterViewActivity.adapter.addAll(Manga.chapter_names);
+    		MangaReaderAPI.nbChapters = Manga.chapter_names.size();
     		MangaReaderAPI.chapterNames.clear();
-    		MangaReaderAPI.chapterNames.addAll(chapter_names);
+    		MangaReaderAPI.chapterNames.addAll(Manga.chapter_names);
     		ChapterViewActivity.adapter.sort(null);
     		ChapterViewActivity.adapter.notifyDataSetChanged();
 
@@ -54,10 +53,10 @@ public class ChapterViewAsync extends AsyncTask<String, Void, Void> {
     	if (ChapterViewActivity.adapter != null)
     	{
     		ChapterViewActivity.adapter.clear();
-    		ChapterViewActivity.adapter.addAll(chapter_names);
-    		MangaReaderAPI.nbChapters = chapter_names.size();
+    		ChapterViewActivity.adapter.addAll(Manga.chapter_names);
+    		MangaReaderAPI.nbChapters = Manga.chapter_names.size();
     		MangaReaderAPI.chapterNames.clear();
-    		MangaReaderAPI.chapterNames.addAll(chapter_names);
+    		MangaReaderAPI.chapterNames.addAll(Manga.chapter_names);
     		ChapterViewActivity.adapter.sort(null);
     		ChapterViewActivity.adapter.notifyDataSetChanged();
     	}
@@ -92,25 +91,24 @@ public class ChapterViewAsync extends AsyncTask<String, Void, Void> {
 	   	
 		SharedPreferences settings = context.getSharedPreferences(StringUtil.sanitizeFilename(ChapterViewActivity.current_manga_name), 0);
    		
-		chapter_names = GSON.fromJson(settings.getString(Constants.CHAPTER_LIST,null),chapter_names.getClass());
-		if( chapter_names !=null )
+		Manga.chapter_names = GSON.fromJson(settings.getString(Constants.CHAPTER_LIST,null),Manga.chapter_names.getClass());
+		if( Manga.chapter_names !=null )
 		{
 			MangaReaderAPI.chapterNames.clear();
-			MangaReaderAPI.chapterNames.addAll(chapter_names);
+			MangaReaderAPI.chapterNames.addAll(Manga.chapter_names);
 		}
 		if((MangaReaderAPI.chapterNames == null) || (MangaReaderAPI.chapterNames.size() == 0))
 		{
 			//Manga.mra.setCurrentURL(Manga.mra.getFirstChapterURL(ChapterViewActivity.current_manga_name));
 			Manga.mra.refreshLists();
 
-			chapter_names = new ArrayList<String>();
-			chapter_names.addAll(MangaReaderAPI.chapterNames);
-			ArrayList<String> chapter_url = new ArrayList<String>();
-			chapter_url.addAll(Manga.mra.getChapterList());
+			Manga.chapter_names = new ArrayList<String>();
+			Manga.chapter_names.addAll(MangaReaderAPI.chapterNames);
+			Manga.chapter_url.addAll(Manga.mra.getChapterList());
 			// Write setting
 			Editor editor = settings.edit();
 			editor.putString(Constants.CHAPTER_LIST,GSON.toJson(MangaReaderAPI.chapterNames));
-			editor.putString(Constants.CHAPTER_URL,GSON.toJson(chapter_url));
+			editor.putString(Constants.CHAPTER_URL,GSON.toJson(Manga.chapter_url));
 			editor.commit();
 		}
 		

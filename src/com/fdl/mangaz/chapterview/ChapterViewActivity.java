@@ -66,7 +66,7 @@ public class ChapterViewActivity extends Activity implements OnItemClickListener
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Intent intent = new Intent(this,ChapterSliderActivity.class);
 		String current_chapter = (String)parent.getItemAtPosition(position);
-		ChapterSliderActivity.chapter_number = StringUtil.getChapterNumber(current_chapter)-1;
+		ChapterSliderActivity.chapter_number = Manga.chapter_names.indexOf(current_chapter); //StringUtil.getChapterNumber(current_chapter)-1;
     	startActivity(intent);
 	}
 	
