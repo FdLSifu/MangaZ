@@ -5,7 +5,7 @@
 	android:orderInCategory="1"
 	android:showAsAction="always"
 	android:title="@+string/action_add_to_favorite"
-	android:icon="@android:drawable/btn_star_big_off"
+	android:icon="@android:drawable/ic_menu_add"
 	/>
 
 </menu>

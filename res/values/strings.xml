@@ -6,5 +6,6 @@
     <string name="action_search">Search</string>
     <string name="action_download">Downloads</string>
     <string name="hello_world">Hello world!</string>
+    <string name="question_files">Do you want to delete files also ?</string>
 
 </resources>

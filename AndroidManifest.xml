@@ -5,20 +5,21 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="17" />
-	<uses-permission android:name="android.permission.INTERNET" /> 
+        android:minSdkVersion="19"
+        android:targetSdkVersion="19" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>"
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.Holo"
-        android:uiOptions="splitActionBarWhenNarrow" >
+        android:theme="@android:style/Theme.Holo">
         <meta-data android:name="android.support.UI_OPTIONS"
               android:value="splitActionBarWhenNarrow" />
         <activity
             android:name="com.fdl.mangaz.MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:uiOptions="splitActionBarWhenNarrow">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +31,7 @@
             android:parentActivityName ="com.fdl.mangaz.MainActivity">
         </activity>
         <activity
-            android:name="com.fdl.mangaz.FindActivity"
+            android:name="com.fdl.mangaz.mangareaderlist.MangaReaderListActivity"
             android:parentActivityName ="com.fdl.mangaz.MainActivity">
         </activity>
         <activity
@@ -38,16 +39,17 @@
             android:parentActivityName ="com.fdl.mangaz.MainActivity">
         </activity>
         <activity
-            android:name="com.fdl.mangaz.MangaView"
-            android:parentActivityName ="com.fdl.mangaz.FindActivity">
+            android:name="com.fdl.mangaz.MangaDescriptionActivity"
+            android:parentActivityName ="com.fdl.mangaz.mangareaderlist.MangaReaderListActivity">
         </activity>
         <activity
-           android:name="com.fdl.mangaz.ChapterView"
+           android:name="com.fdl.mangaz.chapterview.ChapterViewActivity"
            android:parentActivityName ="com.fdl.mangaz.MainActivity">
         </activity>
         <activity
-           android:name="com.fdl.mangaz.ChapterSlider"
-           android:parentActivityName ="com.fdl.mangaz.ChapterView">
+           android:name="com.fdl.mangaz.chapterslider.ChapterSliderActivity"
+           android:parentActivityName ="com.fdl.mangaz.chapterview.ChapterViewActivity"
+           android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
     </application>
 
