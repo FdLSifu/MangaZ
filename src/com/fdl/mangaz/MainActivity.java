@@ -178,10 +178,14 @@ public class MainActivity extends Activity implements OnItemClickListener,OnItem
 	    	if(flag)
 	    	{
 				ArrayList<Integer> selecteditems = mainadapter.getSelectItems();
+				ArrayList<Manga> mangaselected = new ArrayList<Manga>();
 				for(Integer index : selecteditems)
 				{
-					Manga m = mainadapter.getItem(index.intValue());
-					//Remove preferences associated to this manga
+					mangaselected.add(mainadapter.getItem(index.intValue()));
+				}
+				for(Integer index : selecteditems)
+				{
+					Manga m = mangaselected.get(index.intValue());
 					SharedPreferences settings = getSharedPreferences(StringUtil.sanitizeFilename(m.getTitle()), 0);
 					if(settings != null)
 					{
